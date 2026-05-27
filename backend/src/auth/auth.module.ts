@@ -1,0 +1,26 @@
+import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { UsersModule } from '../users/users.module';
+import { LandlordModule } from '../landlord/landlord.module';
+import { TenantsModule } from '../tenants/tenants.module';
+import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
+import { JwtStrategy } from './jwt.strategy';
+
+@Module({
+  imports: [
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'cil-jwt-secret',
+      signOptions: { expiresIn: '8h' },
+    }),
+    UsersModule,
+    LandlordModule,
+    TenantsModule,
+  ],
+  providers: [AuthService, JwtStrategy],
+  controllers: [AuthController],
+  exports: [AuthService],
+})
+export class AuthModule {}

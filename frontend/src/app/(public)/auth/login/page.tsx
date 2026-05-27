@@ -1,34 +1,42 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, FormEvent } from "react";
 import { FaEnvelope, FaLock, FaSignInAlt, FaGoogle, FaLinkedin } from "react-icons/fa";
+import LoadingDiamond from "@/components/ui/LoadingDiamond";
+import { loginUser } from "@/services/authApi";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
     try {
-      console.log("Login attempt:", { email, password });
-      alert("Login feature coming soon! Backend integration pending.");
-    } catch {
-      setError("Login failed. Please try again.");
+      const result = await loginUser({ email, password });
+      window.localStorage.setItem('cil_token', result.accessToken);
+      window.localStorage.setItem('cil_user', JSON.stringify(result.user));
+      const destination = result.user.role === 'landlord' ? '/landlord' : '/tenant';
+      router.push(destination);
+    } catch (err: any) {
+      setError(err?.message || 'Login failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="py-20 bg-slate-50 min-h-screen">
-      <div className="mx-auto flex w-full max-w-5xl flex-col rounded-[2rem] overflow-hidden bg-white shadow-2xl md:flex-row">
-        <div className="hidden md:block md:w-1/2 bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 text-white p-12">
-          <div className="space-y-8">
+    <div className="relative py-24 bg-slate-50 min-h-screen">
+      {isLoading && <LoadingDiamond message="Signing in" />}
+      <div className="mx-auto w-full max-w-5xl overflow-hidden rounded-[2.25rem] bg-white shadow-2xl md:grid md:grid-cols-[1.05fr_0.95fr] md:gap-6">
+        <div className="hidden min-h-[560px] rounded-l-[2.25rem] bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 p-12 text-white md:block">
+          <div className="space-y-10">
             <div>
               <p className="text-sm uppercase tracking-[0.32em] text-accent-200">Welcome back</p>
               <h1 className="mt-4 text-4xl font-bold">Secure access for your property workflow.</h1>
@@ -49,13 +57,13 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="w-full md:w-1/2 p-10">
-          <div className="mb-8 text-center">
+        <div className="w-full p-10 sm:p-12 lg:p-14">
+          <div className="mb-10 text-center max-w-xl mx-auto">
             <Link href="/" className="text-3xl font-bold text-primary-900 hover:text-primary-700">
               CIL
             </Link>
-            <p className="mt-4 text-2xl font-semibold text-primary-900">Sign in to your account</p>
-            <p className="mt-2 text-gray-600">Secure access to tenant, property, and corporate tools.</p>
+            <p className="mt-4 text-3xl font-semibold text-primary-900">Sign in to your account</p>
+            <p className="mt-3 text-base text-gray-600">Login your dashboard and secure access to tenant, property, and corporate tools.</p>
           </div>
 
           {error && (

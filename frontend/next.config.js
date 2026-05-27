@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const isDev = process.env.NODE_ENV !== 'production';
+
 const nextConfig = {
   reactStrictMode: true,
   images: {
@@ -10,6 +12,10 @@ const nextConfig = {
     ],
   },
   headers: async () => {
+    const scriptSrc = isDev
+      ? "script-src 'self' 'unsafe-eval' 'unsafe-inline';"
+      : "script-src 'self';";
+
     return [
       {
         source: "/:path*",
@@ -38,7 +44,7 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self';",
-              "script-src 'self';",
+              scriptSrc,
               "style-src 'self' 'unsafe-inline';",
               "img-src 'self' data: https://res.cloudinary.com;",
               "font-src 'self' data:;",

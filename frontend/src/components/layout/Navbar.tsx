@@ -4,8 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { FiMenu, FiX, FiHome, FiBook, FiPhone } from "react-icons/fi";
-import { BsBuilding } from "react-icons/bs";
+import { FaHome, FaBuilding, FaInfoCircle, FaPhoneAlt, FaBars, FaTimes } from "react-icons/fa";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,10 +24,10 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { label: "Home", href: "/", icon: FiHome },
-    { label: "Services", href: "/services", icon: BsBuilding },
-    { label: "About", href: "/about", icon: FiBook },
-    { label: "Contact", href: "/contact", icon: FiPhone },
+    { label: "Home", href: "/", icon: FaHome },
+    { label: "Services", href: "/services", icon: FaBuilding },
+    { label: "About", href: "/about", icon: FaInfoCircle },
+    { label: "Contact", href: "/contact", icon: FaPhoneAlt },
   ];
 
   return (
@@ -100,7 +99,7 @@ export default function Navbar() {
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden p-2 text-primary-900 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+            {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
           </motion.button>
         </div>
 

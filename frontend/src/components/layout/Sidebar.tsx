@@ -7,15 +7,21 @@ import {
   FaHome,
   FaUsers,
   FaBuilding,
+  FaUserCircle,
+  FaMapMarkerAlt,
+  FaUserTie,
   FaSignOutAlt,
   FaBars,
   FaTimes,
 } from "react-icons/fa";
 
 const navItems = [
-  { href: "/dashboard/tenant", label: "Tenant", icon: FaHome },
-  { href: "/dashboard/admin", label: "Admin", icon: FaUsers },
-  { href: "/dashboard/corporate", label: "Corporate", icon: FaBuilding },
+  { href: "/tenant", label: "Tenant", icon: FaHome },
+  { href: "/tenant/properties", label: "Properties", icon: FaMapMarkerAlt },
+  { href: "/tenant/profile", label: "Profile", icon: FaUserCircle },
+  { href: "/landlord", label: "Landlord", icon: FaUserTie },
+  { href: "/admin", label: "Admin", icon: FaUsers },
+  { href: "/corporate", label: "Corporate", icon: FaBuilding },
 ];
 
 export default function Sidebar() {

@@ -10,6 +10,16 @@ cp .env.example .env
 npm run dev
 ```
 
+## Paystack
+
+Set `PAYSTACK_SECRET` in `.env` to verify webhook calls from Paystack. The backend reads `x-paystack-signature` and verifies the webhook payload using HMAC-SHA512.
+
+## Uploads
+
+The documents module exposes:
+- `POST /landlords/:landlordId/documents/presign` to get a presigned upload URL
+- `POST /landlords/:landlordId/documents` to accept multipart file uploads for local/demo use
+
 ## Architecture
 
 - **Modular structure**: Each feature (auth, users, properties, etc.) is a self-contained module

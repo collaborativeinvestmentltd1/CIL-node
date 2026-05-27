@@ -9,11 +9,11 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 md:flex">
       <Sidebar />
-      <div className="md:pl-72">
+      <div className="flex-1">
         <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur-sm">
-          <div className="max-w-7xl mx-auto flex flex-col gap-4 px-4 py-4 sm:px-6 lg:px-8 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col gap-4 px-4 py-4 sm:px-6 lg:px-8 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-sm uppercase tracking-[0.24em] text-accent-600">CIL Workspace</p>
               <h1 className="text-3xl font-bold text-primary-900">Dashboard</h1>
@@ -34,7 +34,7 @@ export default function DashboardLayout({
           </div>
         </header>
 
-        <main className="max-w-7xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
+        <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
           {children}
         </main>
       </div>

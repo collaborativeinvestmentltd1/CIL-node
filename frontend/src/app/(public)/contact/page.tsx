@@ -43,7 +43,7 @@ export default function ContactPage() {
 
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 xl:grid-cols-5">
+          <div className="grid gap-12 xl:grid-cols-5 xl:gap-16">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="xl:col-span-2 rounded-[2rem] bg-white p-10 shadow-sm border border-slate-200">
               <h2 className="text-3xl font-bold text-primary-900 mb-6">Contact details</h2>
               <div className="space-y-6">
@@ -97,10 +97,10 @@ export default function ContactPage() {
               </div>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="xl:col-span-3 rounded-[2rem] bg-white p-10 shadow-sm border border-slate-200">
+            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="xl:col-span-3 rounded-[2rem] bg-white p-10 xl:p-12 shadow-sm border border-slate-200">
               <h2 className="text-3xl font-bold text-primary-900 mb-6">Send us a message</h2>
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid gap-5 sm:grid-cols-2">
+              <form onSubmit={handleSubmit} className="space-y-6 xl:space-y-8">
+                <div className="grid gap-5 sm:grid-cols-2 xl:gap-8">
                   <label className="space-y-2 text-sm text-slate-700">
                     <span>Full Name</span>
                     <input
@@ -127,7 +127,7 @@ export default function ContactPage() {
                   </label>
                 </div>
 
-                <div className="grid gap-5 sm:grid-cols-2">
+                <div className="grid gap-5 sm:grid-cols-2 xl:gap-8">
                   <label className="space-y-2 text-sm text-slate-700">
                     <span>Phone</span>
                     <input

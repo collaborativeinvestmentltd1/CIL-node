@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { FaGoogle, FaLinkedin, FaInstagram } from "react-icons/fa";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -107,27 +108,24 @@ export default function Footer() {
             </p>
             <div className="flex gap-6">
               <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-accent-300"
+                href="https://www.google.com"
+                className="inline-flex items-center gap-2 text-gray-400 hover:text-accent-300"
               >
-                Twitter
+                <FaGoogle size={18} />
+                Google
               </a>
               <a
                 href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-accent-300"
+                className="inline-flex items-center gap-2 text-gray-400 hover:text-accent-300"
               >
+                <FaLinkedin size={18} />
                 LinkedIn
               </a>
               <a
                 href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-accent-300"
+                className="inline-flex items-center gap-2 text-gray-400 hover:text-accent-300"
               >
+                <FaInstagram size={18} />
                 Instagram
               </a>
             </div>
