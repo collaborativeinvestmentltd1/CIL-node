@@ -22,7 +22,8 @@ export default function LoginPage() {
       const result = await loginUser({ email, password });
       window.localStorage.setItem('cil_token', result.accessToken);
       window.localStorage.setItem('cil_user', JSON.stringify(result.user));
-      const destination = result.user.role === 'landlord' ? '/landlord' : '/tenant';
+      const role = result.user.role;
+      const destination = role === 'landlord' ? '/landlord' : role === 'agent' ? '/agent' : role === 'realEstate' ? '/real-estate' : '/tenant';
       router.push(destination);
     } catch (err: any) {
       setError(err?.message || 'Login failed. Please try again.');

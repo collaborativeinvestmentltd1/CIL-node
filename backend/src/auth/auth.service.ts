@@ -15,31 +15,14 @@ export class AuthService {
 
   async register(payload: { firstName: string; lastName: string; email: string; password: string; role: UserRole }) {
     const user = await this.usersService.createUser(payload);
-    await this.initializeUserProfile(user);
-    return this.buildAuthResponse(user);
-  }
-
-  async loginWithOAuth(profile: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    picture?: string;
-    provider: string;
-    providerId: string;
-  }) {
-    const user = await this.usersService.findOrCreateOAuthUser(profile);
-    return this.buildAuthResponse(user);
-  }
-
-  private async initializeUserProfile(user: AppUser) {
-    if (user.role === 'landlord') {
+    if (payload.role === 'landlord') {
       this.landlordService.initializeLandlordAccount(user.id, {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
       });
     }
-    if (user.role === 'tenant') {
+    if (payload.role === 'tenant') {
       this.tenantsService.createTenantProfile({
         userId: user.id,
         firstName: user.firstName,
@@ -47,7 +30,7 @@ export class AuthService {
         email: user.email,
       });
     }
-    // TODO: Add agent and real estate profile initialization when those services are ready
+    return this.buildAuthResponse(user);
   }
 
   async login(email: string, password: string) {
@@ -68,8 +51,6 @@ export class AuthService {
         lastName: user.lastName,
         email: user.email,
         role: user.role,
-        profilePicture: user.profilePicture,
-        oauthProvider: user.oauthProvider,
       },
     };
   }

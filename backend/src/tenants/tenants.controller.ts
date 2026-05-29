@@ -14,7 +14,7 @@ export class TenantsController {
   @Roles('tenant', 'admin')
   getTenant(@Param('tenantId') tenantId: string, @Request() req: any) {
     if (req.user.role !== 'admin' && req.user.sub !== tenantId) {
-      return { error: 'Unauthorized' };
+      throw new UnauthorizedException('Access denied');
     }
     const tenant = this.tenantsService.getTenantByUserId(tenantId);
     return { tenant };
@@ -24,7 +24,7 @@ export class TenantsController {
   @Roles('tenant', 'admin')
   getLandlords(@Param('tenantId') tenantId: string, @Request() req: any) {
     if (req.user.role !== 'admin' && req.user.sub !== tenantId) {
-      return { error: 'Unauthorized' };
+      throw new UnauthorizedException('Access denied');
     }
     return { landlords: this.landlordService.getLandlordsForTenant(tenantId) };
   }
@@ -33,7 +33,7 @@ export class TenantsController {
   @Roles('tenant', 'admin')
   getPayments(@Param('tenantId') tenantId: string, @Request() req: any, @Query('landlordId') landlordId?: string) {
     if (req.user.role !== 'admin' && req.user.sub !== tenantId) {
-      return { error: 'Unauthorized' };
+      throw new UnauthorizedException('Access denied');
     }
     const payments = this.landlordService.getTenantPaymentsAcrossLandlords(tenantId);
     return { payments: landlordId ? payments.filter((payment) => payment.landlordId === landlordId) : payments };
@@ -43,7 +43,7 @@ export class TenantsController {
   @Roles('tenant', 'admin')
   getAgreements(@Param('tenantId') tenantId: string, @Request() req: any) {
     if (req.user.role !== 'admin' && req.user.sub !== tenantId) {
-      return { error: 'Unauthorized' };
+      throw new UnauthorizedException('Access denied');
     }
     return { agreements: this.landlordService.getTenantAgreements(tenantId) };
   }
@@ -52,7 +52,7 @@ export class TenantsController {
   @Roles('tenant', 'admin')
   sendMessage(@Param('tenantId') tenantId: string, @Param('landlordId') landlordId: string, @Body() body: { subject: string; message: string }, @Request() req: any) {
     if (req.user.role !== 'admin' && req.user.sub !== tenantId) {
-      return { error: 'Unauthorized' };
+      throw new UnauthorizedException('Access denied');
     }
     return this.landlordService.sendTenantRequest(tenantId, landlordId, body);
   }

@@ -38,6 +38,7 @@ export class TenantsService {
   addDocument(userId: string, url: string) {
     const tenant = this.tenants[userId];
     if (!tenant) return null;
+    tenant.documents = tenant.documents || [];
     tenant.documents.push(url);
     return tenant;
   }

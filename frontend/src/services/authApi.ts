@@ -13,8 +13,24 @@ export async function loginUser(payload: { email: string; password: string }) {
   return request('/auth/login', { method: 'POST', body: JSON.stringify(payload) });
 }
 
-export async function registerUser(payload: { firstName: string; lastName: string; email: string; password: string; role: 'tenant' | 'landlord' }) {
+export async function registerUser(payload: { firstName: string; lastName: string; email: string; password: string; role: 'tenant' | 'landlord' | 'agent' | 'realEstate'; phone?: string; companyName?: string; companyWebsite?: string }) {
   return request('/auth/register', { method: 'POST', body: JSON.stringify(payload) });
+}
+
+export async function getSocialProfile(provider: 'google' | 'linkedin') {
+  return new Promise<{ firstName: string; lastName: string; email: string }>((resolve, reject) => {
+    const mockProfiles = {
+      google: { firstName: 'Ada', lastName: 'Okoro', email: 'ada.okoro@gmail.com' },
+      linkedin: { firstName: 'Emeka', lastName: 'Adebayo', email: 'emeka.adebayo@linkedin.com' },
+    };
+    setTimeout(() => {
+      if (mockProfiles[provider]) {
+        resolve(mockProfiles[provider]);
+      } else {
+        reject(new Error('Unable to fetch social profile'));
+      }
+    }, 450);
+  });
 }
 
 export async function getMe(token: string) {
@@ -27,4 +43,6 @@ export async function getMe(token: string) {
   });
 }
 
-export default { loginUser, registerUser, getMe };
+const authApi = { loginUser, registerUser, getMe };
+export default authApi;
+

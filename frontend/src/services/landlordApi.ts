@@ -6,8 +6,8 @@ async function request(path: string, opts: RequestInit = {}) {
   const headers: Record<string, string> = { ...((opts.headers as any) || {}) };
   if (!headers["Content-Type"] && !(opts.body instanceof FormData)) headers["Content-Type"] = "application/json";
   const token = typeof window !== "undefined" ? localStorage.getItem("cil_token") : null;
-  if (token) headers["Authorization"] = `Bearer ${token}`;
-  const res = await fetch(`${BASE}${path}`, { ...opts, headers });
+  if (token && !headers["Authorization"]) headers["Authorization"] = `Bearer ${token}`;
+  const res = await fetch(`${BASE}${path}`, { ...opts, headers, credentials: 'include' });
   if (!res.ok) throw new Error((await res.json()).error || res.statusText);
   return res.json();
 }
@@ -56,9 +56,12 @@ export async function sendTenantMessage(tenantId: string, landlordId: string, pa
 
 export async function uploadDocument(landlordId: string, file: File, type: string, tenantId?: string) {
   const token = typeof window !== 'undefined' ? localStorage.getItem('cil_token') : null;
+  const presignHeaders: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (token) presignHeaders.Authorization = `Bearer ${token}`;
+
   const presignResp = await fetch(`${BASE}/landlords/${landlordId}/documents/presign`, {
     method: 'POST',
-    headers: Object.assign({ 'Content-Type': 'application/json' }, token ? { Authorization: `Bearer ${token}` } : {}),
+    headers: presignHeaders,
     body: JSON.stringify({ filename: file.name, contentType: file.type }),
   });
   if (!presignResp.ok) throw new Error('Failed to get upload URL');
@@ -83,7 +86,7 @@ export async function getPayments(landlordId: string, opts: { from?: string; to?
   return request(`/landlords/${landlordId}/payments${q ? `?${q}` : ""}`);
 }
 
-export default {
+const landlordApi = {
   getLandlordTenants,
   getLandlordProperties,
   createProperty,
@@ -99,3 +102,5 @@ export default {
   getRank,
   getPayments,
 };
+
+export default landlordApi;

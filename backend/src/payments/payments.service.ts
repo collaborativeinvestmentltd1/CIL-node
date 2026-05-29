@@ -31,6 +31,7 @@ export class PaymentsService {
 
     const payment: Payment = {
       id: `pay_${Date.now()}`,
+      landlordId,
       tenantId,
       propertyId,
       amount,

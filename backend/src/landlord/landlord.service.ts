@@ -142,6 +142,10 @@ export class LandlordService {
     return allProperties.find((property) => property.id === propertyId) || null;
   }
 
+  isPropertyOwnedBy(landlordId: string, propertyId: string) {
+    return (this.properties[landlordId] || []).some((property) => property.id === propertyId);
+  }
+
   createProperty(landlordId: string, payload: Partial<Property>) {
     const p: Property = {
       id: `p_${Date.now()}`,
