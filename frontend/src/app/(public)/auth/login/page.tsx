@@ -1,18 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState, FormEvent } from "react";
 import { FaEnvelope, FaLock, FaSignInAlt, FaGoogle, FaLinkedin } from "react-icons/fa";
 import LoadingDiamond from "@/components/ui/LoadingDiamond";
 import { loginUser } from "@/services/authApi";
+import { setSession } from "@/lib/auth";
+import { getDashboardPath } from "@/lib/routes";
+import { useAppRouter } from "@/lib/navigation";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+  const router = useAppRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -20,10 +22,12 @@ export default function LoginPage() {
     setIsLoading(true);
     try {
       const result = await loginUser({ email, password });
-      window.localStorage.setItem('cil_token', result.accessToken);
-      window.localStorage.setItem('cil_user', JSON.stringify(result.user));
-      const role = result.user.role;
-      const destination = role === 'landlord' ? '/landlord' : role === 'agent' ? '/agent' : role === 'realEstate' ? '/real-estate' : '/tenant';
+      setSession(result.accessToken, result.user);
+      const from =
+        typeof window !== "undefined"
+          ? new URLSearchParams(window.location.search).get("from")
+          : null;
+      const destination = from && from.startsWith("/") ? from : getDashboardPath(result.user.role);
       router.push(destination);
     } catch (err: any) {
       setError(err?.message || 'Login failed. Please try again.');

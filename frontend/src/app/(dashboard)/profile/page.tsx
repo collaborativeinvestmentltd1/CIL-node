@@ -1,40 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import LoadingDiamond from "@/components/ui/LoadingDiamond";
+import { getStoredUser } from "@/lib/auth";
+import { getProfilePath } from "@/lib/routes";
+import { useAppRouter } from "@/lib/navigation";
 
 export default function ProfileRedirect() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
+  const router = useAppRouter();
 
   useEffect(() => {
-    const user = window.localStorage.getItem("cil_user");
+    const user = getStoredUser();
     if (!user) {
-      router.push("/auth/login");
+      router.replace("/auth/login");
       return;
     }
-
-    try {
-      const userData = JSON.parse(user);
-      const role = userData?.role || "tenant";
-
-      const roleProfileMap: { [key: string]: string } = {
-        tenant: "/dashboard/tenant/profile",
-        landlord: "/dashboard/landlord/profile",
-        agent: "/dashboard/agent/profile",
-        realEstate: "/dashboard/real-estate/profile",
-      };
-
-      const profilePath = roleProfileMap[role] || "/dashboard/tenant/profile";
-      router.push(profilePath);
-    } catch (_) {
-      router.push("/dashboard/tenant/profile");
-    }
+    router.replace(getProfilePath(user.role));
   }, [router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-[40vh] flex items-center justify-center">
       <LoadingDiamond message="Redirecting to profile" />
     </div>
   );

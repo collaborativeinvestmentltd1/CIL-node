@@ -1,190 +1,190 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { motion } from "framer-motion";
 import {
   FaHome,
   FaUsers,
   FaBuilding,
   FaUserCircle,
   FaMapMarkerAlt,
-  FaHandshake,
-  FaDollarSign,
   FaSignOutAlt,
   FaBars,
   FaTimes,
-  FaChartLine,
 } from "react-icons/fa";
 import ProfileAvatar from "@/components/ui/ProfileAvatar";
+import { clearSession, getStoredUser } from "@/lib/auth";
+import { useAppRouter } from "@/lib/navigation";
+import type { SidebarRole } from "@/lib/routes";
+import clsx from "clsx";
 
 interface SidebarProps {
-  userType?: "tenant" | "landlord" | "admin" | "agent" | "realEstate";
+  userType?: SidebarRole;
 }
 
-const navItemsByRole = {
+const navItemsByRole: Record<
+  SidebarRole,
+  { href: string; label: string; icon: typeof FaHome }[]
+> = {
   tenant: [
-    { href: "/dashboard/tenant", label: "Dashboard", icon: FaHome },
-    { href: "/dashboard/tenant/properties", label: "Properties", icon: FaMapMarkerAlt },
-    { href: "/dashboard/tenant/applications", label: "Applications", icon: FaUsers },
-    { href: "/dashboard/tenant/profile", label: "Profile", icon: FaUserCircle },
+    { href: "/tenant", label: "Dashboard", icon: FaHome },
+    { href: "/tenant/properties", label: "Properties", icon: FaMapMarkerAlt },
+    { href: "/tenant/landlords", label: "Landlords", icon: FaUsers },
+    { href: "/tenant/profile", label: "Profile", icon: FaUserCircle },
   ],
   landlord: [
-    { href: "/dashboard/landlord", label: "Dashboard", icon: FaHome },
-    { href: "/dashboard/landlord/properties", label: "My Properties", icon: FaBuilding },
-    { href: "/dashboard/landlord/tenants", label: "Tenants", icon: FaUsers },
-    { href: "/dashboard/landlord/agents", label: "Agents", icon: FaHandshake },
-    { href: "/dashboard/landlord/earnings", label: "Earnings", icon: FaDollarSign },
-    { href: "/dashboard/landlord/profile", label: "Profile", icon: FaUserCircle },
+    { href: "/landlord", label: "Dashboard", icon: FaHome },
+    { href: "/landlord/properties", label: "My Properties", icon: FaBuilding },
+    { href: "/landlord/tenants", label: "Tenants", icon: FaUsers },
+    { href: "/landlord/profile", label: "Profile", icon: FaUserCircle },
   ],
-  agent: [
-    { href: "/dashboard/agent", label: "Dashboard", icon: FaHome },
-    { href: "/dashboard/agent/listings", label: "Listings", icon: FaMapMarkerAlt },
-    { href: "/dashboard/agent/agreements", label: "Agreements", icon: FaHandshake },
-    { href: "/dashboard/agent/earnings", label: "Earnings", icon: FaDollarSign },
-    { href: "/dashboard/agent/profile", label: "Profile", icon: FaUserCircle },
-  ],
-  realEstate: [
-    { href: "/dashboard/real-estate", label: "Dashboard", icon: FaHome },
-    { href: "/dashboard/real-estate/kycVerification", label: "KYC", icon: FaChartLine },
-    { href: "/dashboard/real-estate/commission", label: "Commission", icon: FaDollarSign },
-    { href: "/dashboard/real-estate/settings", label: "Settings", icon: FaUserCircle },
-  ],
-  admin: [
-    { href: "/dashboard/admin", label: "Dashboard", icon: FaHome },
-    { href: "/dashboard/admin/users", label: "Users", icon: FaUsers },
-    { href: "/dashboard/admin/properties", label: "Properties", icon: FaBuilding },
-    { href: "/dashboard/admin/kyc", label: "KYC Verification", icon: FaChartLine },
-    { href: "/dashboard/admin/payments", label: "Payments", icon: FaDollarSign },
-  ],
+  admin: [{ href: "/admin", label: "Dashboard", icon: FaHome }],
+  corporate: [{ href: "/corporate", label: "Dashboard", icon: FaHome }],
+  agent: [{ href: "/agent/profile", label: "Profile", icon: FaUserCircle }],
+  realEstate: [{ href: "/real-estate/profile", label: "Profile", icon: FaUserCircle }],
 };
+
+const roleDisplay: Record<SidebarRole, string> = {
+  tenant: "Tenant",
+  landlord: "Landlord",
+  admin: "Administrator",
+  corporate: "Portfolio",
+  agent: "Agent",
+  realEstate: "Real Estate",
+};
+
+const ROOT_NAV_HREFS = new Set(["/tenant", "/landlord", "/admin", "/corporate"]);
+
+function isNavActive(pathname: string, href: string): boolean {
+  if (ROOT_NAV_HREFS.has(href)) return pathname === href;
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+function NavLinks({
+  items,
+  onNavigate,
+}: {
+  items: (typeof navItemsByRole)["tenant"];
+  onNavigate?: () => void;
+}) {
+  const pathname = usePathname();
+
+  return (
+    <>
+      {items.map((item) => {
+        const isActive = isNavActive(pathname, item.href);
+
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            onClick={onNavigate}
+            className={clsx(
+              "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors group",
+              isActive
+                ? "bg-white/15 text-white"
+                : "text-slate-100 hover:bg-white/10"
+            )}
+          >
+            <item.icon
+              className={clsx(
+                "transition-colors",
+                isActive ? "text-accent-300" : "text-accent-400 group-hover:text-accent-300"
+              )}
+            />
+            <span>{item.label}</span>
+          </Link>
+        );
+      })}
+    </>
+  );
+}
 
 export default function Sidebar({ userType = "tenant" }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useAppRouter();
   const navItems = navItemsByRole[userType] || navItemsByRole.tenant;
-  const userInitials = "JD";
+  const stored = getStoredUser();
+  const displayName = stored
+    ? `${stored.firstName} ${stored.lastName}`.trim() || "User"
+    : "User";
 
-  const roleDisplay = {
-    tenant: "Tenant",
-    landlord: "Landlord",
-    agent: "Agent",
-    realEstate: "Real Estate",
-    admin: "Administrator",
+  const handleSignOut = () => {
+    clearSession();
+    router.push("/auth/login");
   };
 
   return (
-    <aside className="relative z-20">
-      <div className="md:hidden px-4 py-4 flex items-center justify-between bg-white border-b border-slate-200 shadow-sm">
+    <aside className="relative z-20 shrink-0">
+      <div className="md:hidden px-4 py-3 flex items-center justify-between bg-white border-b border-slate-200">
         <div>
-          <p className="text-xs uppercase tracking-[0.24em] text-gray-500">Role</p>
-          <h2 className="text-lg font-semibold text-primary-900">{roleDisplay[userType]}</h2>
+          <p className="text-xs uppercase tracking-wider text-slate-500">CIL Properties</p>
+          <h2 className="text-base font-semibold text-primary-900">{roleDisplay[userType]}</h2>
         </div>
         <button
           type="button"
           onClick={() => setIsOpen((prev) => !prev)}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-primary-900"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-primary-900"
+          aria-label={isOpen ? "Close menu" : "Open menu"}
         >
           {isOpen ? <FaTimes /> : <FaBars />}
         </button>
       </div>
 
-      <motion.div
-        initial={false}
-        animate={{ x: isOpen ? 0 : -320 }}
-        transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        className="fixed inset-y-0 left-0 w-72 bg-primary-950 text-white border-r border-primary-800 shadow-2xl md:static md:translate-x-0 md:shadow-none"
+      <div
+        className={clsx(
+          "fixed inset-y-0 left-0 z-30 w-72 bg-primary-950 text-white border-r border-primary-800 shadow-xl transition-transform duration-200 md:static md:translate-x-0 md:shadow-none md:flex md:flex-col md:w-64 lg:w-72",
+          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        )}
       >
-        <div className="hidden md:flex flex-col h-full py-8 px-6">
-          <div className="mb-10">
-            <Link href="/" className="inline-flex items-center gap-3 mb-4 hover:opacity-80 transition">
-              <div className="h-12 w-12 rounded-3xl bg-gradient-to-br from-accent-600 to-accent-500 flex items-center justify-center text-primary-950 text-lg font-bold shadow-lg">
-                C
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.24em] text-accent-300 font-semibold">CIL</p>
-                <h1 className="text-xl font-bold">Dashboard</h1>
-              </div>
-            </Link>
-            <p className="text-xs text-slate-300 mt-2">
-              {roleDisplay[userType]} Portal
-            </p>
-          </div>
-
-          <nav className="space-y-2 flex-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-100 hover:bg-white/10 transition-colors group"
-              >
-                <item.icon className="text-accent-400 group-hover:text-accent-300 transition-colors" />
-                <span>{item.label}</span>
-              </Link>
-            ))}
-          </nav>
-
-          <div className="mt-8 p-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
-            <p className="text-xs uppercase tracking-[0.24em] text-slate-400 mb-3">Active user</p>
-            <div className="flex items-center gap-3">
-              <div className="h-11 w-11 rounded-full overflow-hidden">
-                {/* Profile avatar component handles upload and preview */}
-                <ProfileAvatar size={44} />
-              </div>
-              <div>
-                <p className="text-sm font-semibold">User Name</p>
-                <p className="text-xs text-slate-400">{roleDisplay[userType]}</p>
-              </div>
-            </div>
-            <button className="mt-4 inline-flex items-center gap-2 text-sm text-slate-200 hover:text-white transition-colors group w-full">
-              <FaSignOutAlt className="group-hover:animate-pulse" /> Sign out
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        <div className="md:hidden bg-primary-950 h-full flex flex-col p-6 overflow-y-auto">
+        <div className="flex flex-col h-full py-6 px-5 overflow-y-auto">
           <div className="mb-8">
-            <Link href="/" className="inline-flex items-center gap-3">
-              <div className="h-10 w-10 rounded-2xl bg-accent-600 flex items-center justify-center text-primary-950 font-bold">
+            <Link href="/" className="inline-flex items-center gap-3 hover:opacity-90 transition">
+              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-accent-600 to-accent-500 flex items-center justify-center text-primary-950 text-sm font-bold">
                 C
               </div>
               <div>
-                <p className="text-xs uppercase tracking-[0.24em] text-accent-300">CIL</p>
-                <h1 className="text-lg font-bold">Dashboard</h1>
+                <p className="text-[10px] uppercase tracking-widest text-accent-300 font-semibold">
+                  CIL Properties
+                </p>
+                <h1 className="text-lg font-bold">{roleDisplay[userType]}</h1>
               </div>
             </Link>
           </div>
 
           <nav className="space-y-1 flex-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setIsOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-slate-100 hover:bg-white/10 transition"
-              >
-                <item.icon className="text-accent-400" />
-                {item.label}
-              </Link>
-            ))}
+            <NavLinks items={navItems} onNavigate={() => setIsOpen(false)} />
           </nav>
 
-          <div className="mt-auto pt-6 border-t border-white/10">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="h-10 w-10 rounded-lg overflow-hidden">
-                <ProfileAvatar size={40} />
-              </div>
-              <div>
-                <p className="text-sm font-semibold">User</p>
+          <div className="mt-6 p-4 rounded-xl border border-white/10 bg-white/5">
+            <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-3">Signed in</p>
+            <div className="flex items-center gap-3">
+              <ProfileAvatar size={40} />
+              <div className="min-w-0">
+                <p className="text-sm font-semibold truncate">{displayName}</p>
                 <p className="text-xs text-slate-400">{roleDisplay[userType]}</p>
               </div>
             </div>
-            <button className="flex items-center gap-2 text-sm text-slate-200 hover:text-white w-full">
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className="mt-4 inline-flex items-center gap-2 text-sm text-slate-200 hover:text-white transition-colors w-full"
+            >
               <FaSignOutAlt /> Sign out
             </button>
           </div>
         </div>
-      </motion.div>
+      </div>
+
+      {isOpen ? (
+        <button
+          type="button"
+          className="fixed inset-0 z-20 bg-black/40 md:hidden"
+          aria-label="Close menu overlay"
+          onClick={() => setIsOpen(false)}
+        />
+      ) : null}
     </aside>
   );
 }

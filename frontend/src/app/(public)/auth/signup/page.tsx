@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState, FormEvent } from "react";
 import { FaUser, FaBriefcase, FaShieldAlt, FaGoogle, FaLinkedin } from "react-icons/fa";
 import LoadingDiamond from "@/components/ui/LoadingDiamond";
 import { getSocialProfile, registerUser } from "@/services/authApi";
+import { setSession } from "@/lib/auth";
+import { getDashboardPath } from "@/lib/routes";
+import { useAppRouter } from "@/lib/navigation";
 
 type UserType = "tenant" | "landlord" | "agent" | "realEstate" | "";
 
@@ -24,18 +26,11 @@ export default function SignupPage() {
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+  const router = useAppRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((p) => ({ ...p, [name]: value }));
-  };
-
-  const destinationForRole = (role: UserType) => {
-    if (role === "landlord") return "/landlord";
-    if (role === "agent") return "/agent";
-    if (role === "realEstate") return "/real-estate";
-    return "/tenant";
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -74,9 +69,8 @@ export default function SignupPage() {
       if (formData.companyWebsite) payload.companyWebsite = formData.companyWebsite;
 
       const result = await registerUser(payload);
-      window.localStorage.setItem("cil_token", result.accessToken);
-      window.localStorage.setItem("cil_user", JSON.stringify(result.user));
-      router.push(destinationForRole(result.user.role));
+      setSession(result.accessToken, result.user);
+      router.push(getDashboardPath(result.user.role));
     } catch (err: any) {
       setError(err?.message || "Signup failed. Please try again.");
     } finally {

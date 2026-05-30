@@ -11,7 +11,7 @@ const config: Config = {
       colors: {
         primary: {
           50: "#f0f6fb",
-          100: "#dpe8f6",
+          100: "#dfe8f6",
           200: "#c4d9f1",
           300: "#a3c5e8",
           400: "#7fa8dd",
@@ -49,7 +49,7 @@ const config: Config = {
         light: "#ffffff",
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
+        sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
       },
       animation: {
         fadeIn: "fadeIn 0.6s ease-in-out",

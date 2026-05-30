@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { FaUserCircle, FaUpload } from "react-icons/fa";
+import { getStoredUser, USER_KEY } from "@/lib/auth";
 
 export default function ProfileAvatar({ size = 44 }: { size?: number }) {
   const [avatar, setAvatar] = useState<string | null>(null);
@@ -9,25 +10,18 @@ export default function ProfileAvatar({ size = 44 }: { size?: number }) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    const raw = window.localStorage.getItem("cil_user");
-    if (raw) {
-      try {
-        const user = JSON.parse(raw);
-        if (user?.avatar) setAvatar(user.avatar);
-        const first = user?.firstName || "";
-        const last = user?.lastName || "";
-        const derived = `${(first[0] || "").toUpperCase()}${(last[0] || "").toUpperCase()}`;
-        if (derived.trim()) setInitials(derived);
-      } catch (_) {}
+    const user = getStoredUser();
+    if (user) {
+      if (user.avatar) setAvatar(user.avatar);
+      const first = user.firstName || "";
+      const last = user.lastName || "";
+      const derived = `${(first[0] || "").toUpperCase()}${(last[0] || "").toUpperCase()}`;
+      if (derived.trim()) setInitials(derived);
     }
 
     const onUpdate = () => {
-      const r = window.localStorage.getItem("cil_user");
-      if (!r) return;
-      try {
-        const u = JSON.parse(r);
-        if (u?.avatar) setAvatar(u.avatar);
-      } catch (_) {}
+      const u = getStoredUser();
+      if (u?.avatar) setAvatar(u.avatar);
     };
 
     window.addEventListener("cil_user_update", onUpdate as EventListener);
@@ -45,10 +39,9 @@ export default function ProfileAvatar({ size = 44 }: { size?: number }) {
       const data = reader.result as string;
       setAvatar(data);
       try {
-        const raw = window.localStorage.getItem("cil_user");
-        const user = raw ? JSON.parse(raw) : {};
-        user.avatar = data;
-        window.localStorage.setItem("cil_user", JSON.stringify(user));
+        const user = getStoredUser() || {};
+        const updated = { ...user, avatar: data };
+        window.localStorage.setItem(USER_KEY, JSON.stringify(updated));
         window.dispatchEvent(new Event("cil_user_update"));
       } catch (_) {}
     };

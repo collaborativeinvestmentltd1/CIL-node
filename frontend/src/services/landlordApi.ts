@@ -1,11 +1,12 @@
 import { Property, Message, Payment } from "@/types/landlord";
+import { getToken } from "@/lib/auth";
 
 const BASE = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:4000";
 
 async function request(path: string, opts: RequestInit = {}) {
   const headers: Record<string, string> = { ...((opts.headers as any) || {}) };
   if (!headers["Content-Type"] && !(opts.body instanceof FormData)) headers["Content-Type"] = "application/json";
-  const token = typeof window !== "undefined" ? localStorage.getItem("cil_token") : null;
+  const token = typeof window !== "undefined" ? getToken() : null;
   if (token && !headers["Authorization"]) headers["Authorization"] = `Bearer ${token}`;
   const res = await fetch(`${BASE}${path}`, { ...opts, headers, credentials: 'include' });
   if (!res.ok) throw new Error((await res.json()).error || res.statusText);
@@ -55,7 +56,7 @@ export async function sendTenantMessage(tenantId: string, landlordId: string, pa
 }
 
 export async function uploadDocument(landlordId: string, file: File, type: string, tenantId?: string) {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('cil_token') : null;
+  const token = typeof window !== "undefined" ? getToken() : null;
   const presignHeaders: Record<string, string> = { 'Content-Type': 'application/json' };
   if (token) presignHeaders.Authorization = `Bearer ${token}`;
 

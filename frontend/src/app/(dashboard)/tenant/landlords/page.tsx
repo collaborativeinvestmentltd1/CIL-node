@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { FaBuilding, FaPaperPlane, FaUsers } from "react-icons/fa";
 import { getTenantLandlords, sendTenantMessage } from "@/services/landlordApi";
 import { Landlord } from "@/types/landlord";
+import { getStoredUser } from "@/lib/auth";
 
 export default function TenantLandlordsPage() {
   const [landlords, setLandlords] = useState<Landlord[]>([]);
@@ -14,10 +15,11 @@ export default function TenantLandlordsPage() {
   const [status, setStatus] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [tenantId, setTenantId] = useState("t1");
 
-  const tenantId = typeof window !== "undefined"
-    ? JSON.parse(localStorage.getItem('cil_user') || '{}')?.id || 't1'
-    : 't1';
+  useEffect(() => {
+    setTenantId(getStoredUser()?.id || "t1");
+  }, []);
 
   useEffect(() => {
     setLoading(true);
