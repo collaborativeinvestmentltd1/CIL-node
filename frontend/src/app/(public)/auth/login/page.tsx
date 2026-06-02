@@ -44,7 +44,7 @@ export default function LoginPage() {
           <div className="space-y-10">
             <div>
               <p className="text-sm uppercase tracking-[0.32em] text-accent-200">Welcome back</p>
-              <h1 className="mt-4 text-4xl font-bold">Secure access for your property workflow.</h1>
+              <h1 className="mt-4 text-4xl font-bold text-white">Secure access for your property workflow.</h1>
             </div>
             <p className="text-lg leading-8 text-slate-200">
               Sign in to continue managing applications, payments, tenant interactions, and corporate property operations.

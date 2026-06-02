@@ -190,19 +190,19 @@ export function hasRole(user: User | null, role: UserRole | UserRole[]): boolean
 export function getDashboardRoute(role: string): string {
   switch (role) {
     case UserRole.ADMIN:
-      return '/dashboard/admin';
+      return '/admin';
     case UserRole.CORPORATE:
-      return '/dashboard/corporate';
+      return '/corporate';
     case UserRole.LANDLORD:
-      return '/dashboard/landlord';
+      return '/landlord';
     case UserRole.TENANT:
-      return '/dashboard/tenant';
+      return '/tenant';
     case UserRole.AGENT:
-      return '/dashboard/agent';
+      return '/agent/profile';
     case UserRole.REAL_ESTATE:
-      return '/dashboard/real-estate';
+      return '/real-estate/profile';
     default:
-      return '/dashboard';
+      return '/tenant';
   }
 }
 

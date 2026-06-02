@@ -5,12 +5,13 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { authService, User, AuthResponse } from '../api/authService';
-import { apiClient } from '../api/client';
+import { authService } from '@/shared/api/authService';
+import { apiClient } from '@/shared/api/client';
+import { setSession, clearSession, type SessionUser } from '@/lib/auth';
 
 export interface AuthState {
   // State
-  user: User | null;
+  user: SessionUser | null;
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
@@ -23,7 +24,7 @@ export interface AuthState {
   logout: () => Promise<void>;
   refreshAccessToken: () => Promise<boolean>;
   setTokens: (accessToken: string, refreshToken: string) => void;
-  setUser: (user: User | null) => void;
+  setUser: (user: SessionUser | null) => void;
   clearError: () => void;
   hydrate: () => Promise<void>;
 }
@@ -52,12 +53,12 @@ export const useAuthStore = create<AuthState>()(
           set({
             user,
             accessToken,
-            refreshToken,
+            refreshToken: refreshToken ?? null,
             isAuthenticated: true,
             isLoading: false,
           });
 
-          // Update API client context
+          setSession(accessToken, user as SessionUser);
           apiClient.setAuthContext({
             token: accessToken,
             refreshToken,
@@ -85,11 +86,12 @@ export const useAuthStore = create<AuthState>()(
           set({
             user,
             accessToken,
-            refreshToken,
+            refreshToken: refreshToken ?? null,
             isAuthenticated: true,
             isLoading: false,
           });
 
+          setSession(accessToken, user as SessionUser);
           apiClient.setAuthContext({
             token: accessToken,
             refreshToken,
@@ -114,6 +116,7 @@ export const useAuthStore = create<AuthState>()(
           // Logout even if API call fails
         }
 
+        clearSession();
         set({
           user: null,
           accessToken: null,
@@ -176,7 +179,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       // Set user
-      setUser: (user: User | null) => {
+      setUser: (user: SessionUser | null) => {
         set({ user });
         if (user) {
           apiClient.setAuthContext({ user, isAuthenticated: true });

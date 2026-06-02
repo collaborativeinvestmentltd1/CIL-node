@@ -1,18 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { FaDollarSign, FaBell, FaClipboardList, FaUserCircle, FaFileUpload, FaSearch } from "react-icons/fa";
+import { FaDollarSign, FaBell, FaClipboardList, FaUserCircle, FaFileUpload, FaSearch, FaUsers } from "react-icons/fa";
 import Billboard from "@/components/common/Billboard";
+import { ActionCard, Panel } from "@/components/ui/Panel";
 
 export default function TenantDashboard() {
   return (
     <div className="space-y-8">
-      <div className="rounded-[2rem] bg-gradient-to-r from-primary-700 to-primary-900 p-8 text-white shadow-2xl">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-accent-200">Your renter hub</p>
-            <h1 className="mt-4 text-4xl font-bold">Welcome back, John.</h1>
-            <p className="mt-3 max-w-2xl text-slate-200">Track your upcoming rent, lease details, and new homes without leaving this page.</p>
+      <div className="rounded-2xl bg-gradient-to-r from-primary-700 to-primary-900 p-6 sm:p-8 text-white shadow-lg">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+          <div className="space-y-2 max-w-2xl">
+            <p className="text-xs font-semibold uppercase tracking-wider text-accent-200">Tenant hub</p>
+            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Welcome back.</h1>
+            <p className="text-sm sm:text-base text-slate-200 leading-7">
+              Track rent, lease details, landlords, and property search from one place.
+            </p>
           </div>
           <button className="inline-flex items-center gap-3 rounded-full bg-accent-600 px-6 py-4 text-sm font-semibold text-primary-950 shadow-lg shadow-accent-500/30 hover:bg-accent-500 transition">
             <FaBell /> Recent updates
@@ -22,33 +25,11 @@ export default function TenantDashboard() {
 
       <Billboard title="Message from landlord" message="Hi John — water maintenance scheduled for Unit 3A on June 2. Expect brief downtime." />
 
-      <div className="grid gap-4 md:grid-cols-3">
-        <Link href="/tenant/profile" className="group rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-          <div className="inline-flex h-12 w-12 items-center justify-center rounded-3xl bg-accent-100 text-accent-700">
-            <FaUserCircle />
-          </div>
-          <p className="mt-5 text-sm uppercase tracking-[0.24em] text-slate-500">Profile</p>
-          <h3 className="mt-3 text-xl font-semibold text-primary-900">Update details</h3>
-          <p className="mt-2 text-slate-600">Keep your profile accurate so landlords can approve your applications faster.</p>
-        </Link>
-
-        <Link href="/tenant/profile" className="group rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-          <div className="inline-flex h-12 w-12 items-center justify-center rounded-3xl bg-accent-100 text-accent-700">
-            <FaFileUpload />
-          </div>
-          <p className="mt-5 text-sm uppercase tracking-[0.24em] text-slate-500">Documents</p>
-          <h3 className="mt-3 text-xl font-semibold text-primary-900">Upload safely</h3>
-          <p className="mt-2 text-slate-600">Upload the documents your landlord needs to move things forward.</p>
-        </Link>
-
-        <Link href="/tenant/properties" className="group rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-          <div className="inline-flex h-12 w-12 items-center justify-center rounded-3xl bg-accent-100 text-accent-700">
-            <FaSearch />
-          </div>
-          <p className="mt-5 text-sm uppercase tracking-[0.24em] text-slate-500">Properties</p>
-          <h3 className="mt-3 text-xl font-semibold text-primary-900">Explore listings</h3>
-          <p className="mt-2 text-slate-600">Browse homes, compare options, and jump straight into applications.</p>
-        </Link>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <ActionCard href="/tenant/profile" icon={<FaUserCircle />} label="Profile" description="Update your details" />
+        <ActionCard href="/tenant/profile" icon={<FaFileUpload />} label="Documents" description="Upload verification files" />
+        <ActionCard href="/tenant/properties" icon={<FaSearch />} label="Search homes" description="Browse available listings" />
+        <ActionCard href="/tenant/landlords" icon={<FaUsers />} label="Landlords" description="View your contacts" />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">

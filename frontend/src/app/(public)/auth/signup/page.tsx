@@ -112,7 +112,7 @@ export default function SignupPage() {
           <div className="space-y-10">
             <div>
               <p className="text-sm uppercase tracking-[0.32em] text-accent-200">Create account</p>
-              <h1 className="mt-4 text-4xl font-bold">Start managing with confidence.</h1>
+              <h1 className="mt-4 text-4xl font-bold text-white">Start managing with confidence.</h1>
             </div>
             <p className="text-lg leading-8 text-slate-200">
               {isRealEstate

@@ -40,7 +40,7 @@ export interface PaginatedResponse<T = any> {
 /**
  * Standard error response
  */
-export interface ApiError {
+export interface ApiErrorResponse {
   statusCode: number;
   message: string;
   error?: string;

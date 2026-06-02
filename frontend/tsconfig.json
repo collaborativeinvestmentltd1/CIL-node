@@ -43,6 +43,9 @@
       ],
       "@store/*": [
         "./src/store/*"
+      ],
+      "@/shared/*": [
+        "../shared/*"
       ]
     },
     "plugins": [

@@ -46,7 +46,7 @@ const FEATURES = [
   },
   {
     icon: FaGlobe,
-    title: "Corporate Portal",
+    title: "Portfolio Dashboard",
     description: "Manage multi-property operations from a single enterprise-grade dashboard.",
   },
 ];
@@ -132,20 +132,20 @@ export default function HomePage() {
               variants={itemVariants}
               className="mb-6 inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold tracking-[0.24em] text-accent-200"
             >
-              PROPERTY • TENANT • CORPORATE
+              PROPERTY MANAGEMENT PLATFORM
             </motion.p>
             <motion.h1
               variants={itemVariants}
-              className="text-5xl md:text-7xl font-bold leading-tight tracking-tight"
+              className="text-4xl md:text-6xl font-semibold leading-tight tracking-tight text-white"
             >
-              The smarter way to manage real estate in Nigeria.
+              The smarter way to manage properties in Nigeria.
             </motion.h1>
             <motion.p
               variants={itemVariants}
-              className="mt-6 text-lg md:text-xl text-slate-200 leading-9"
+              className="mt-6 text-base md:text-lg text-slate-200 leading-8 max-w-2xl mx-auto"
             >
-              From corporate portfolios to tenant journeys, CIL brings every
-              property process together in one modern, secure platform.
+              CIL Properties brings listings, tenant onboarding, payments, and landlord operations
+              into one secure platform.
             </motion.p>
 
             <motion.div
@@ -365,7 +365,7 @@ export default function HomePage() {
               <p className="text-sm uppercase tracking-[0.32em] text-accent-300 mb-4">
                 Proven outcomes
               </p>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
                 Built to win trust and close more leads.
               </h2>
               <p className="max-w-xl text-gray-200 leading-8">
@@ -463,7 +463,7 @@ export default function HomePage() {
               <p className="text-sm uppercase tracking-[0.32em] text-accent-200 mb-3">
                 Ready for your next chapter?
               </p>
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
                 Join CIL and grow your property business with confidence.
               </h2>
               <p className="max-w-2xl text-gray-200 leading-8">

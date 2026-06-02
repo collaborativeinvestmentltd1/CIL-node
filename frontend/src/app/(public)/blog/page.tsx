@@ -64,7 +64,7 @@ export default function BlogPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl">
             <p className="text-sm uppercase tracking-[0.32em] text-accent-200 mb-4">Insights</p>
-            <h1 className="text-5xl md:text-6xl font-bold leading-tight">News and expert guides for property operators.</h1>
+            <h1 className="text-5xl md:text-6xl font-bold leading-tight text-white">News and expert guides for property operators.</h1>
             <p className="mt-6 text-lg text-slate-200 max-w-2xl leading-8">
               Learn from industry experts, discover new trends, and find ideas that help you unlock more value from every asset.
             </p>
@@ -139,7 +139,7 @@ export default function BlogPage() {
             <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
               <div>
                 <p className="text-sm uppercase tracking-[0.32em] text-accent-200 mb-3">Subscribe</p>
-                <h2 className="text-3xl font-semibold">Receive weekly property intelligence.</h2>
+                <h2 className="text-3xl font-semibold text-white">Receive weekly property intelligence.</h2>
                 <p className="mt-3 text-slate-200 max-w-2xl leading-7">
                   Join the CIL newsletter for data-backed insights, product updates, and market commentary.
                 </p>

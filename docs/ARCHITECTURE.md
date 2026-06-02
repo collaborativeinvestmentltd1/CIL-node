@@ -1,181 +1,135 @@
-# CIL MVP Architecture
+﻿# CIL Architecture Audit
 
 ## Overview
 
-Clean, modular architecture designed for production deployment and future scaling.
+This document describes the actual architecture implemented in the repository as of the current audit.
 
-## Core Principles
+The CIL platform combines a Next.js frontend, a NestJS backend, and shared API utilities. The current implementation supports demo workflows and authentication, but persistence and many production-grade features remain incomplete.
 
-1. **Separation of Concerns** - Each module handles one responsibility
-2. **Modularity** - Features are self-contained and loosely coupled
-3. **Scalability** - Database schema and API design support growth
-4. **Security** - JWT authentication, input validation, error handling
-5. **Performance** - Query optimization, image caching, pagination
-6. **Type Safety** - Full TypeScript throughout
+## System architecture
 
-## Backend Architecture (NestJS)
+- `frontend/`: Next.js 14 App Router web client
+- `backend/`: NestJS API server
+- `shared/`: shared API client, authentication helpers, permission utilities, and shared types
+- `docs/`: documentation and audit artifacts
 
-```
-src/
-├── auth/              # Authentication logic (JWT, password reset)
-├── users/             # User management, profiles
-├── properties/        # Property CRUD, search, filtering
-├── applications/      # Tenant applications
-├── payments/          # Payment processing (Paystack integration)
-├── service-requests/  # Maintenance/support requests
-├── common/            # Shared middleware, guards, interceptors
-├── database/          # TypeORM entities, migrations
-└── config/            # Environment, database config
-```
+## Frontend architecture
 
-### Module Pattern
+### Routing
 
-Each module (auth, users, properties, etc.) contains:
-- **Controller** - HTTP endpoints
-- **Service** - Business logic
-- **Repository** - Data access (TypeORM)
-- **DTO** - Request/response validation
-- **Entity** - Database schema
+- Public routes live under `frontend/src/app/(public)`.
+- Dashboard routes live under `frontend/src/app/(dashboard)`.
+- Route protection is enforced by `frontend/middleware.ts`, which redirects unauthenticated users to `/auth/login`.
+- Dashboard layout is rendered by `frontend/src/app/(dashboard)/layout.tsx`.
 
-### Authentication Flow
+### State management
 
-1. User POST /auth/signup or /auth/login
-2. Backend validates credentials (bcryptjs for passwords)
-3. Issues JWT (short-lived) + Refresh Token (long-lived)
-4. Frontend stores tokens in localStorage (secure httpOnly in production)
-5. All subsequent requests include JWT in Authorization header
-6. Expired JWT → frontend uses refresh token to get new JWT
+- Auth state is managed in `frontend/src/store/authStore.ts` with Zustand.
+- Local storage persistence is used for auth state, access tokens, and user profile data.
+- The frontend also uses local state hooks like `useState` for forms and UI controls.
+- The app includes a custom navigation loader via `frontend/src/components/providers/NavigationProvider.tsx`.
 
-### Database Schema
+### API integration
 
-**Users**
-- id, email, password, firstName, lastName, role, createdAt, updatedAt
+- Shared HTTP client in `shared/api/client.ts` handles requests, retries, and auth headers.
+- Auth service lives in `shared/api/authService.ts`.
+- Landlord APIs are implemented in `frontend/src/services/landlordApi.ts`.
+- Some frontend components still use hardcoded demo data from `frontend/src/data/propertyCatalog.ts`.
 
-**Properties**
-- id, title, description, type, price, location, beds, baths, images, status, ownerId, createdAt, updatedAt
+### Middleware and auth
 
-**Applications**
-- id, tenantId, propertyId, status, personalInfo, employmentInfo, identificationUrl, createdAt, updatedAt
+- `frontend/middleware.ts` checks for the `cil_token` cookie before allowing access to protected routes.
+- `frontend/src/lib/auth.ts` manages token and user session storage in both localStorage and a browser cookie.
+- The auth flow is partially inconsistent: backend sets `cil_access_token` in some endpoints while frontend expects `cil_token`.
 
-**Payments**
-- id, tenantId, propertyId, amount, status, paystackRef, createdAt, updatedAt
+## Backend architecture
 
-**ServiceRequests**
-- id, tenantId, propertyId, description, images, status, createdAt, updatedAt
+### Modules
 
-## Frontend Architecture (Next.js)
+Implemented modules:
+- `backend/src/auth` — authentication and JWT handling
+- `backend/src/users` — in-memory user storage and validation
+- `backend/src/landlord` — landlord portfolio and tenant relationship services
+- `backend/src/tenants` — tenant profile data and messaging support
+- `backend/src/payments` — Paystack webhook verification and payment recording
+- `backend/src/documents` — document presign and upload endpoints
 
-```
-src/
-├── app/               # Next.js App Router
-│   ├── (public)/      # Unauthenticated pages (layout wrapper)
-│   └── (dashboard)/   # Protected pages (auth layout wrapper)
-├── components/        # Reusable UI components
-├── services/          # API client functions
-├── hooks/             # Custom React hooks
-├── store/             # Zustand global state
-├── types/             # TypeScript types
-└── utils/             # Helper functions
-```
+### Authentication
 
-### Routing Strategy
+- JWT strategy implemented in `backend/src/auth/jwt.strategy.ts`.
+- `backend/src/auth/auth.module.ts` configures `JwtModule` with `process.env.JWT_SECRET`.
+- Role-based authorization uses `backend/src/auth/roles.decorator.ts` and `backend/src/auth/roles.guard.ts`.
+- `backend/src/auth/auth.controller.ts` provides `/auth/register`, `/auth/login`, `/auth/logout`, and `/auth/me`.
 
-**Public Routes (no auth required)**
-- / (homepage)
-- /about
-- /services
-- /blog
-- /contact
-- /auth/login
-- /auth/signup
+### Data services
 
-**Protected Routes (auth required)**
-- /dashboard/tenant/** (tenant portal)
-- /dashboard/admin/** (admin portal)
-- /dashboard/corporate/** (corporate portal)
+- `backend/src/users/users.service.ts` stores users in memory.
+- `backend/src/landlord/landlord.service.ts` stores tenants, properties, payments, messages, agreements, and requests in in-memory maps.
+- `backend/src/tenants/tenants.service.ts` stores tenant profiles in memory.
+- Demo seed accounts are created in `backend/src/main.ts` on startup.
 
-### State Management
+### External integrations
 
-**Global State (Zustand)**
-- Auth state (user, tokens, isAuthenticated)
-- UI state (sidebar open, theme)
+- Paystack webhook signature validation in `backend/src/payments/payments.controller.ts`.
+- AWS S3 presigned uploads via `backend/src/documents/s3.service.ts`.
+- Security headers and rate limiting are configured in `backend/src/main.ts`.
 
-**Server State (TanStack Query)**
-- Properties list, user profile, applications, payments
-- Automatic caching, refetching, synchronization
+## Shared utilities
 
-**Local State (React useState)**
-- Form inputs, UI toggles
+- `shared/api/client.ts` is the centralized HTTP client for frontend and shared code.
+- `shared/api/authService.ts` defines auth endpoints and payloads.
+- `shared/permissions.ts` includes role and permission utilities, though these are not yet wired consistently across the frontend.
+- `shared/types/index.ts` defines common user, property, payment, and application types.
 
-### Component Structure
+## Data flow
 
-- UI components in `/components/ui` (buttons, inputs, cards)
-- Feature components in `/components/{feature}` (property cards, tenant forms)
-- Layout components in `/components/layout` (header, sidebar, footer)
+### Auth flow
 
-## Data Flow
+- Frontend login uses `frontend/src/services/authApi.ts`.
+- Backend login issues a JWT and sets an HTTP-only cookie in `backend/src/auth/auth.controller.ts`.
+- The frontend also stores a token in localStorage and in a separate cookie.
+- Protected dashboard routes rely on the frontend `cil_token` cookie.
 
-### Happy Path: Tenant Viewing Properties
+### Landlord workflow
 
-1. User visits `/` (public)
-2. Clicks "Browse Properties"
-3. Frontend calls `/properties` API with filters
-4. Backend queries database, returns paginated results
-5. TanStack Query caches results
-6. Components render with data
-7. User clicks property → view details
+- Dashboard UI pages request landlord data from `/landlords/:landlordId/*` endpoints.
+- `LandlordService` returns demo properties, tenants, payments, and messages.
+- Create/update property endpoints modify in-memory state only.
 
-### Happy Path: Tenant Applying for Property
+### Tenant workflow
 
-1. Tenant clicks "Apply"
-2. Form component captures data
-3. React Hook Form validates inputs
-4. User submits → POST `/applications`
-5. Backend validates, stores in database
-6. Frontend redirects to `/dashboard/tenant/applications`
-7. Applications list refreshes via TanStack Query
+- Tenant dashboard UI uses `getTenantLandlords`, `getTenantPayments`, and tenant-focused APIs.
+- Tenant messaging sends requests through `backend/src/tenants/tenants.controller.ts`.
 
-### Happy Path: Admin Approving Application
+### Payment workflow
 
-1. Admin logs in → `/dashboard/admin`
-2. Views pending applications
-3. Reviews tenant details, income, identification
-4. Clicks "Approve" → PATCH `/applications/{id}/approve`
-5. Backend updates status, sends notification email
-6. Frontend refetches applications list
+- Paystack sends webhook events to `/payments/webhook`.
+- Backend verifies the signed payload and records payment data in memory.
 
-## Security Considerations
+## Service boundaries
 
-1. **Authentication** - JWT with short expiration + refresh tokens
-2. **Authorization** - Role-based guards (tenant, admin, corporate)
-3. **Validation** - Class-validator on DTOs (backend + frontend)
-4. **Password** - bcryptjs hashing, salt rounds = 10
-5. **CORS** - Whitelist frontend origin
-6. **Rate Limiting** - Prevent brute force attacks
-7. **Image Upload** - Cloudinary (CDN, secure URLs)
-8. **Payment** - Paystack handles sensitive data, backend verifies references
+- Frontend is responsible for UI, auth state, navigation, and calling APIs.
+- Backend is responsible for auth verification, role enforcement, payment webhook processing, and upload presigned URL generation.
+- Shared module provides API client and type contracts.
 
-## Performance Optimizations
+## Constraints and gaps
 
-1. **Image Loading** - Cloudinary with responsive transforms
-2. **Pagination** - Default 12 items per page
-3. **Caching** - TanStack Query with stale-while-revalidate
-4. **Database Indexing** - Indexes on email, propertyId, tenantId for fast queries
-5. **API Response** - Lean payloads, no unnecessary data
-6. **Code Splitting** - Next.js automatic route-based splitting
+- The backend does not persist data; it currently uses in-memory storage.
+- Some backend imports reference missing DTO files.
+- The frontend references refresh tokens, but backend does not implement a refresh endpoint.
+- Several dashboard pages are placeholders rather than full features.
+- The frontend package includes unused dependencies such as `@tanstack/react-query`.
 
-## Deployment Strategy (Render)
+## Deployment and build configuration
 
-1. **Frontend** - Render Static Site or Web Service (Next.js)
-2. **Backend** - Render Web Service (Node.js)
-3. **Database** - Render PostgreSQL or external provider
-4. **Environment Variables** - Stored in Render dashboard
-5. **CI/CD** - GitHub webhooks trigger auto-deploy on push
+- Frontend uses Next.js App Router, Tailwind, and additional security headers in `next.config.js`.
+- Backend uses NestJS, `helmet`, `express-rate-limit`, and cookie parsing.
+- `.env.example` suggests production services like PostgreSQL, Cloudinary, and Paystack, but backend support is not complete.
 
-## Future Considerations
+## Recommended next steps
 
-1. **Mobile App** - React Native with shared types from `/shared`
-2. **caching** - Redis for session/token blacklisting
-3. **Microservices** - Separate payment, notification, file upload services
-4. **Real-time** - WebSocket for live notifications
-5. **Analytics** - Tenant engagement, conversion metrics
+- Implement backend persistence and remove demo-only state.
+- Fix auth cookie and refresh token contract mismatches.
+- Add missing DTO validation classes and align backend validation with frontend requests.
+- Remove or implement unused documentation and dependencies.
+- Complete placeholder dashboard screens with real API-backed data.

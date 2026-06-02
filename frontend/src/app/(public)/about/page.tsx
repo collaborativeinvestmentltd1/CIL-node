@@ -11,7 +11,7 @@ export default function AboutPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl">
             <p className="text-sm uppercase tracking-[0.32em] text-accent-200 mb-4">Our story</p>
-            <h1 className="text-5xl md:text-6xl font-bold leading-tight">Built to power property, tenants, and corporate portfolios.</h1>
+            <h1 className="text-4xl md:text-5xl font-semibold leading-tight text-white">Built for modern property operations in Nigeria.</h1>
             <p className="mt-6 text-lg text-slate-200 max-w-2xl leading-8">
               CIL modernizes real estate operations with a platform designed for rapid growth, transparent payments, and seamless tenant experiences.
             </p>

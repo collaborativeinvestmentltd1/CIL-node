@@ -33,7 +33,7 @@ export default function ContactPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl">
             <p className="text-sm uppercase tracking-[0.32em] text-accent-200 mb-4">Contact</p>
-            <h1 className="text-5xl md:text-6xl font-bold leading-tight">Let{"'"}s build your next property win together.</h1>
+            <h1 className="text-5xl md:text-6xl font-bold leading-tight text-white">Let{"'"}s build your next property win together.</h1>
             <p className="mt-6 text-lg text-slate-200 max-w-2xl leading-8">
               Share your challenge and our team will respond with a tailored plan for your property portfolio.
             </p>
@@ -78,7 +78,7 @@ export default function ContactPage() {
 
               <div className="mt-12 rounded-[2rem] bg-primary-950 p-8 text-white">
                 <p className="text-sm uppercase tracking-[0.32em] text-accent-300 mb-3">Need a demo?</p>
-                <h3 className="text-2xl font-semibold mb-4">Schedule a walkthrough.</h3>
+                <h3 className="text-2xl font-semibold mb-4 text-white">Schedule a walkthrough.</h3>
                 <p className="text-slate-200 leading-7">
                   Our team will help you set up the right workflow for your portfolio and show the platform in action.
                 </p>

@@ -5,11 +5,8 @@
  */
 
 import {
-  ApiResponse,
-  ApiError,
   RequestConfig,
   AuthContext,
-  PaginatedResponse,
   HttpMethod,
 } from './index';
 
@@ -35,7 +32,10 @@ export class ApiClient {
   private errorInterceptors: ErrorInterceptor[] = [];
 
   constructor(baseURL: string = '') {
-    this.baseURL = baseURL || (typeof window !== 'undefined' ? process.env.NEXT_PUBLIC_API_BASE : '');
+    this.baseURL =
+      baseURL ||
+      (typeof window !== 'undefined' ? process.env.NEXT_PUBLIC_API_BASE : undefined) ||
+      'http://localhost:4000';
   }
 
   /**
@@ -129,7 +129,7 @@ export class ApiClient {
       ...options
     } = config;
 
-    const url = this.buildUrl(path);
+    let url = this.buildUrl(path);
     let finalOptions: RequestInit = {
       method,
       ...options,
@@ -163,12 +163,11 @@ export class ApiClient {
         
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
-          lastError = {
-            statusCode: response.status,
-            message: errorData.message || response.statusText,
-            error: errorData.error,
-            details: errorData,
-          };
+          lastError = new ApiError(
+            response.status,
+            errorData.message || response.statusText,
+            errorData
+          );
 
           // Don't retry 4xx errors (except 429)
           if (response.status >= 400 && response.status < 500 && response.status !== 429) {
@@ -210,7 +209,7 @@ export class ApiClient {
       throw lastError;
     }
 
-    throw new ApiError('Unknown error occurred');
+    throw new ApiError(500, 'Unknown error occurred');
   }
 
   /**

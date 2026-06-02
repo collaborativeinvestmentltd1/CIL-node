@@ -35,7 +35,7 @@ export interface NotificationState {
 /**
  * Create notification store
  */
-export const useNotificationStore = create<NotificationState>((set) => ({
+export const useNotificationStore = create<NotificationState>((set, get) => ({
   notifications: [],
 
   addNotification: (notification) => {
@@ -51,12 +51,13 @@ export const useNotificationStore = create<NotificationState>((set) => ({
     }));
 
     // Auto-remove after duration
-    if (newNotification.duration > 0) {
+    const durationMs = newNotification.duration ?? 5000;
+    if (durationMs > 0) {
       setTimeout(() => {
         set((state) => ({
           notifications: state.notifications.filter((n) => n.id !== id),
         }));
-      }, newNotification.duration);
+      }, durationMs);
     }
 
     return id;
@@ -73,8 +74,7 @@ export const useNotificationStore = create<NotificationState>((set) => ({
   },
 
   success: (title, message, duration) => {
-    const { addNotification } = useNotificationStore.getState();
-    return addNotification({
+    return get().addNotification({
       type: 'success',
       title,
       message,
@@ -83,8 +83,7 @@ export const useNotificationStore = create<NotificationState>((set) => ({
   },
 
   error: (title, message, duration) => {
-    const { addNotification } = useNotificationStore.getState();
-    return addNotification({
+    return get().addNotification({
       type: 'error',
       title,
       message,
@@ -93,8 +92,7 @@ export const useNotificationStore = create<NotificationState>((set) => ({
   },
 
   info: (title, message, duration) => {
-    const { addNotification } = useNotificationStore.getState();
-    return addNotification({
+    return get().addNotification({
       type: 'info',
       title,
       message,
@@ -103,8 +101,7 @@ export const useNotificationStore = create<NotificationState>((set) => ({
   },
 
   warning: (title, message, duration) => {
-    const { addNotification } = useNotificationStore.getState();
-    return addNotification({
+    return get().addNotification({
       type: 'warning',
       title,
       message,

@@ -1,34 +1,46 @@
 "use client";
 
+import Link from "next/link";
 import PropertyManageCard from "@/components/landlord/PropertyManageCard";
-import Billboard from "@/components/common/Billboard";
-import { useState } from "react";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Panel } from "@/components/ui/Panel";
+import { PROPERTY_CATALOG } from "@/data/propertyCatalog";
 
-const initial = [
-  { title: "Lekki Garden Homes", location: "Lekki, Lagos", units: "8 units", price: "₦420,000/mo" },
-  { title: "Victoria Island Suites", location: "VI, Lagos", units: "12 units", price: "₦1,200,000/mo" },
-];
+const landlordListings = PROPERTY_CATALOG.filter((p) => p.landlordId === "landlord-1").map(
+  (p) => ({
+    id: p.id,
+    title: p.title,
+    location: p.location,
+    units: `${p.bedrooms} bed`,
+    price: p.priceLabel,
+  })
+);
 
 export default function LandlordPropertiesPage() {
-  const [properties, setProperties] = useState(initial);
-
   return (
-    <div className="space-y-8">
-      <header className="rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-accent-200">Your listings</p>
-            <h1 className="mt-3 text-3xl font-bold text-primary-900">Manage properties for rent & sale</h1>
-            <p className="mt-3 text-slate-600">Add new listings, edit existing units, and keep your portfolio verified and up to date.</p>
-          </div>
-        </div>
-      </header>
+    <div className="space-y-6">
+      <PageHeader
+        eyebrow="Your listings"
+        title="Manage properties for rent"
+        description="Add and edit units. Tenants discover listings through search and the map."
+        actions={
+          <Link
+            href="/tenant/properties"
+            className="inline-flex rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-primary-900 hover:bg-slate-50"
+          >
+            Preview on map
+          </Link>
+        }
+      />
 
-      <Billboard title="Listing tip" message="Use high-quality photos and detailed descriptions to increase tenant interest." />
+      <Panel padding="md" className="text-sm text-slate-600">
+        Listings with map coordinates appear in tenant search. Keep photos and descriptions up to
+        date to improve applications.
+      </Panel>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        {properties.map((p) => (
-          <PropertyManageCard key={p.title} property={p} />
+        {landlordListings.map((p) => (
+          <PropertyManageCard key={p.id} property={p} />
         ))}
       </div>
     </div>

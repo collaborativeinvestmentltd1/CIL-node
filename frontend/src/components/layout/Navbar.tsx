@@ -2,149 +2,103 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { FaHome, FaBuilding, FaInfoCircle, FaPhoneAlt, FaBars, FaTimes } from "react-icons/fa";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import clsx from "clsx";
+
+const navLinks = [
+  { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
+  { label: "About", href: "/about" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },
+];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-
-  const menuVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { staggerChildren: 0.1 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: -10 },
-    visible: { opacity: 1, x: 0 },
-  };
-
-  const navLinks = [
-    { label: "Home", href: "/", icon: FaHome },
-    { label: "Services", href: "/services", icon: FaBuilding },
-    { label: "About", href: "/about", icon: FaInfoCircle },
-    { label: "Contact", href: "/contact", icon: FaPhoneAlt },
-  ];
+  const pathname = usePathname();
 
   return (
-    <motion.nav
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6 }}
-      className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Link href="/" className="flex items-center gap-3 hover:text-primary-700 transition-colors">
-              <div className="relative w-28 h-10">
-                <Image src="/logo.svg" alt="CIL logo" fill sizes="112px" className="object-contain" />
-              </div>
+    <nav className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
+      <div className="container-max">
+        <div className="flex h-16 items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 shrink-0">
+            <div className="relative h-9 w-24">
+              <Image src="/logo.svg" alt="CIL Properties" fill sizes="96px" className="object-contain" />
+            </div>
+            <span className="hidden text-sm font-semibold text-primary-900 lg:inline">Properties</span>
+          </Link>
+
+          <div className="hidden md:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={clsx(
+                  "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  pathname === link.href
+                    ? "bg-slate-100 text-primary-900"
+                    : "text-slate-600 hover:bg-slate-50 hover:text-primary-900"
+                )}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+
+          <div className="hidden md:flex items-center gap-2">
+            <Link href="/auth/login" className="btn-ghost px-4 py-2">
+              Login
             </Link>
-          </motion.div>
-
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => {
-              const Icon = link.icon;
-              return (
-                <motion.div
-                  key={link.href}
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Link
-                    href={link.href}
-                    className="flex items-center gap-2 text-gray-700 font-medium hover:text-primary-900 transition-colors duration-200 group"
-                  >
-                    <Icon
-                      size={18}
-                      className="text-accent-600 group-hover:text-accent-500 transition-colors"
-                    />
-                    {link.label}
-                  </Link>
-                </motion.div>
-              );
-            })}
+            <Link href="/auth/signup" className="btn-secondary">
+              Get Started
+            </Link>
           </div>
 
-          {/* CTA Buttons */}
-          <div className="hidden md:flex items-center gap-4">
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                href="/auth/login"
-                className="px-4 py-2 text-primary-900 font-medium border border-primary-900 rounded-lg hover:bg-primary-50 transition-colors duration-200"
-              >
-                Login
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                href="/auth/signup"
-                className="px-6 py-2 bg-accent-600 text-white font-medium rounded-lg hover:bg-accent-700 transition-colors duration-200 shadow-md hover:shadow-lg"
-              >
-                Get Started
-              </Link>
-            </motion.div>
-          </div>
-
-          {/* Mobile Menu Toggle */}
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-primary-900 hover:bg-gray-100 rounded-lg transition-colors"
+          <button
+            type="button"
+            onClick={() => setIsOpen((v) => !v)}
+            className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-primary-900"
+            aria-expanded={isOpen}
+            aria-label="Toggle navigation menu"
           >
-            {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-          </motion.button>
+            <span className="sr-only">Menu</span>
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+              {isOpen ? (
+                <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
+              ) : (
+                <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
+              )}
+            </svg>
+          </button>
         </div>
 
-        {/* Mobile Menu */}
-        {isOpen && (
-          <motion.div
-            variants={menuVariants}
-            initial="hidden"
-            animate="visible"
-            className="md:hidden pb-4 border-t border-gray-100"
-          >
-            {navLinks.map((link) => {
-              const Icon = link.icon;
-              return (
-                <motion.div key={link.href} variants={itemVariants}>
-                  <Link
-                    href={link.href}
-                    className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-primary-50 rounded-lg transition-colors"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <Icon size={18} className="text-accent-600" />
-                    {link.label}
-                  </Link>
-                </motion.div>
-              );
-            })}
-            <div className="px-4 py-4 flex flex-col gap-3">
+        {isOpen ? (
+          <div className="md:hidden border-t border-slate-200 py-3 space-y-1">
+            {navLinks.map((link) => (
               <Link
-                href="/auth/login"
-                className="w-full px-4 py-2 text-center text-primary-900 font-medium border border-primary-900 rounded-lg hover:bg-primary-50 transition-colors"
+                key={link.href}
+                href={link.href}
                 onClick={() => setIsOpen(false)}
+                className={clsx(
+                  "block rounded-lg px-3 py-2.5 text-sm font-medium",
+                  pathname === link.href ? "bg-slate-100 text-primary-900" : "text-slate-600 hover:bg-slate-50"
+                )}
               >
+                {link.label}
+              </Link>
+            ))}
+            <div className="pt-3 flex flex-col gap-2">
+              <Link href="/auth/login" className="btn-ghost w-full text-center" onClick={() => setIsOpen(false)}>
                 Login
               </Link>
-              <Link
-                href="/auth/signup"
-                className="w-full px-4 py-2 bg-accent-600 text-white font-medium rounded-lg hover:bg-accent-700 transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
+              <Link href="/auth/signup" className="btn-secondary w-full text-center" onClick={() => setIsOpen(false)}>
                 Get Started
               </Link>
             </div>
-          </motion.div>
-        )}
+          </div>
+        ) : null}
       </div>
-    </motion.nav>
+    </nav>
   );
 }

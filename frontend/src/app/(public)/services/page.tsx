@@ -51,9 +51,9 @@ export default function ServicesPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl">
             <p className="text-sm uppercase tracking-[0.32em] text-accent-200 mb-4">Solutions</p>
-            <h1 className="text-5xl md:text-6xl font-bold leading-tight">A full stack of services for modern property operations.</h1>
-            <p className="mt-6 text-lg text-slate-200 max-w-2xl leading-8">
-              Whether you manage units, teams, or corporate property portfolios, CIL gives you a faster, safer path to scale.
+            <h1 className="text-4xl md:text-5xl font-semibold leading-tight text-white">Services for modern property operations.</h1>
+            <p className="mt-6 text-base text-slate-200 max-w-2xl leading-7">
+              Whether you manage units or growing portfolios, CIL Properties gives you a faster, safer path to scale.
             </p>
           </motion.div>
         </div>
@@ -92,7 +92,7 @@ export default function ServicesPage() {
 
       <section className="py-20 bg-primary-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold mb-6">Everything your property business needs</h2>
+          <h2 className="text-4xl font-bold mb-6 text-white">Everything your property business needs</h2>
           <p className="text-lg text-slate-200 mb-10 max-w-2xl mx-auto">
             Launch faster, manage smarter, and give tenants the modern experience they expect.
           </p>

@@ -1,135 +1,64 @@
 "use client";
 
 import Link from "next/link";
-import { FaGoogle, FaLinkedin, FaInstagram } from "react-icons/fa";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-primary-900 text-white">
+    <footer className="border-t border-slate-200 bg-primary-900 text-white">
       <div className="container-max section-padding">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-          {/* Brand */}
-          <div>
-            <h3 className="text-2xl font-bold text-accent-300 mb-4">CIL</h3>
-            <p className="text-gray-300 text-sm leading-relaxed">
-              Built for Nigeria’s property market—trusted by tenants, investors,
-              and corporate partners.
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-4 mb-12">
+          <div className="md:col-span-1">
+            <h3 className="text-lg font-semibold text-white mb-3">CIL Properties</h3>
+            <p className="text-sm leading-6 text-slate-300">
+              Modern property management for landlords and tenants across Nigeria.
             </p>
           </div>
 
-          {/* Product */}
           <div>
-            <h4 className="font-semibold mb-4 text-white">Product</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li>
-                <Link href="/services" className="hover:text-accent-300">
-                  Features
-                </Link>
-              </li>
-              <li>
-                <Link href="/pricing" className="hover:text-accent-300">
-                  Pricing
-                </Link>
-              </li>
-              <li>
-                <Link href="/faq" className="hover:text-accent-300">
-                  FAQ
-                </Link>
-              </li>
+            <h4 className="text-sm font-semibold text-white mb-3">Product</h4>
+            <ul className="space-y-2 text-sm text-slate-300">
+              <li><Link href="/services" className="hover:text-accent-300">Features</Link></li>
+              <li><Link href="/auth/signup" className="hover:text-accent-300">Get started</Link></li>
+              <li><Link href="/contact" className="hover:text-accent-300">Contact sales</Link></li>
             </ul>
           </div>
 
-          {/* Company */}
           <div>
-            <h4 className="font-semibold mb-4 text-white">Company</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li>
-                <Link href="/about" className="hover:text-accent-300">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="hover:text-accent-300">
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="hover:text-accent-300">
-                  Contact
-                </Link>
-              </li>
+            <h4 className="text-sm font-semibold text-white mb-3">Company</h4>
+            <ul className="space-y-2 text-sm text-slate-300">
+              <li><Link href="/about" className="hover:text-accent-300">About</Link></li>
+              <li><Link href="/blog" className="hover:text-accent-300">Blog</Link></li>
+              <li><Link href="/contact" className="hover:text-accent-300">Contact</Link></li>
             </ul>
           </div>
 
-          {/* Legal */}
           <div>
-            <h4 className="font-semibold mb-4 text-white">Legal</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li>
-                <Link href="/privacy" className="hover:text-accent-300">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className="hover:text-accent-300">
-                  Terms of Service
-                </Link>
-              </li>
+            <h4 className="text-sm font-semibold text-white mb-3">Legal</h4>
+            <ul className="space-y-2 text-sm text-slate-300">
+              <li><Link href="/contact" className="hover:text-accent-300">Privacy</Link></li>
+              <li><Link href="/contact" className="hover:text-accent-300">Terms</Link></li>
             </ul>
           </div>
         </div>
 
-        <div className="bg-white/5 rounded-3xl p-8 border border-white/10 shadow-xl">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 sm:p-8">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <p className="text-sm uppercase tracking-[0.24em] text-accent-300 mb-2">
-                Ready for your next portfolio?
+              <p className="text-xs font-semibold uppercase tracking-wider text-accent-300 mb-2">
+                Start managing smarter
               </p>
-              <h3 className="text-2xl font-semibold text-white">
-                Launch with CIL and start managing returns faster.
-              </h3>
+              <h3 className="text-xl font-semibold text-white">Launch your property operations on CIL Properties.</h3>
             </div>
-            <Link
-              href="/auth/signup"
-              className="inline-flex items-center justify-center rounded-full bg-accent-600 px-6 py-3 text-sm font-semibold text-primary-900 shadow-lg shadow-accent-500/30 hover:bg-accent-500 transition"
-            >
-              Join CIL today
+            <Link href="/auth/signup" className="btn-secondary shrink-0">
+              Create account
             </Link>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-white/10 pt-8 mt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-gray-400">
-              © {currentYear} Collaborative Investment Ltd. All rights reserved.
-            </p>
-            <div className="flex gap-6">
-              <a
-                href="https://www.google.com"
-                className="inline-flex items-center gap-2 text-gray-400 hover:text-accent-300"
-              >
-                <FaGoogle size={18} />
-                Google
-              </a>
-              <a
-                href="https://linkedin.com"
-                className="inline-flex items-center gap-2 text-gray-400 hover:text-accent-300"
-              >
-                <FaLinkedin size={18} />
-                LinkedIn
-              </a>
-              <a
-                href="https://instagram.com"
-                className="inline-flex items-center gap-2 text-gray-400 hover:text-accent-300"
-              >
-                <FaInstagram size={18} />
-                Instagram
-              </a>
-            </div>
-          </div>
+        <div className="mt-8 border-t border-white/10 pt-6 text-sm text-slate-400">
+          © {currentYear} Collaborative Investment Ltd. CIL Properties. All rights reserved.
         </div>
       </div>
     </footer>

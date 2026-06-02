@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --font-inter: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
 * {
   @apply box-border;
 }
@@ -11,7 +15,7 @@ html {
 }
 
 body {
-  @apply bg-white text-gray-900 font-sans antialiased;
+  @apply bg-white font-sans text-slate-900 antialiased;
 }
 
 @layer base {
@@ -21,45 +25,45 @@ body {
   h4,
   h5,
   h6 {
-    @apply font-bold tracking-tight;
+    @apply font-semibold tracking-tight;
   }
 
   a {
     @apply transition-colors duration-200;
   }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent-500 ring-offset-2;
+  }
 }
 
 @layer components {
-  .btn-primary {
-    @apply px-6 py-3 bg-primary-900 text-white font-semibold rounded-lg hover:bg-primary-800 transition-colors shadow-md hover:shadow-lg;
-  }
-
-  .btn-secondary {
-    @apply px-6 py-3 bg-accent-600 text-white font-semibold rounded-lg hover:bg-accent-700 transition-colors shadow-md hover:shadow-lg;
-  }
-
-  .btn-ghost {
-    @apply px-6 py-3 text-primary-900 font-semibold rounded-lg hover:bg-primary-50 transition-colors;
+  .container-max {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
   }
 
   .section-padding {
-    @apply py-16 md:py-24;
+    @apply py-16 sm:py-20 lg:py-24;
   }
 
   .section-title {
-    @apply text-3xl md:text-4xl lg:text-5xl font-bold text-primary-900;
+    @apply text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl;
   }
 
   .section-subtitle {
-    @apply text-lg md:text-xl text-gray-600 mt-4;
+    @apply mt-3 text-base text-slate-600 sm:text-lg;
   }
 
-  .container-max {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg bg-primary-900 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-primary-800;
   }
 
-  .glass {
-    @apply backdrop-blur-md bg-white/30 border border-white/20;
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-lg bg-accent-600 px-5 py-2.5 text-sm font-medium text-primary-950 shadow-sm transition-colors hover:bg-accent-500;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium text-primary-900 transition-colors hover:bg-slate-100;
   }
 
   .text-gradient {
@@ -67,44 +71,25 @@ body {
   }
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #f8fafc;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #e6a31e;
-  border-radius: 10px;
+  background: #cbd5e1;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #032343;
+  background: #94a3b8;
 }
 
-.btn-primary {
-  @apply px-6 py-3 bg-primary-900 text-white rounded-lg font-semibold hover:bg-primary-800 transition-colors;
-}
-
-.btn-secondary {
-  @apply px-6 py-3 bg-accent-600 text-white rounded-lg font-semibold hover:bg-accent-700 transition-colors;
-}
-
-.btn-ghost {
-  @apply px-4 py-2 text-primary-900 hover:bg-primary-50 rounded transition-colors;
-}
-
-.section-padding {
-  @apply py-16 sm:py-20 lg:py-24;
-}
-
-.section-title {
-  @apply text-3xl sm:text-4xl lg:text-5xl font-bold text-primary-900 mb-4;
-}
-
-.section-subtitle {
-  @apply text-lg text-gray-600 mb-8;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
