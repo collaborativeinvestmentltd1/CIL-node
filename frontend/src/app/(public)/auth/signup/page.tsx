@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { useState, FormEvent } from "react";
-import { FaUser, FaBriefcase, FaShieldAlt, FaGoogle, FaLinkedin } from "react-icons/fa";
+import { FaUser, FaBriefcase, FaShieldAlt, FaGoogle, FaLinkedin, FaTools, FaCreditCard } from "react-icons/fa";
 import LoadingDiamond from "@/components/ui/LoadingDiamond";
 import { getSocialProfile, registerUser } from "@/services/authApi";
 import { setSession } from "@/lib/auth";
 import { getDashboardPath } from "@/lib/routes";
 import { useAppRouter } from "@/lib/navigation";
 
-type UserType = "tenant" | "landlord" | "agent" | "realEstate" | "";
+type UserType = "tenant" | "landlord" | "agent" | "realEstate" | "operations" | "finance" | "";
 
 export default function SignupPage() {
   const [userType, setUserType] = useState<UserType>("");
@@ -97,9 +97,11 @@ export default function SignupPage() {
 
   const roleOptions = [
     { value: "tenant", label: "Tenant", icon: FaUser },
-    { value: "landlord", label: "Landlord", icon: FaBriefcase },
+    { value: "landlord", label: "Property Owner", icon: FaBriefcase },
     { value: "agent", label: "Agent", icon: FaBriefcase },
     { value: "realEstate", label: "Real Estate Partner", icon: FaShieldAlt },
+    { value: "operations", label: "Operations Staff", icon: FaTools },
+    { value: "finance", label: "Finance Staff", icon: FaCreditCard },
   ];
 
   const isRealEstate = userType === "realEstate";

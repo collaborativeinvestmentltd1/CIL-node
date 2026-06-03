@@ -13,7 +13,7 @@ export async function loginUser(payload: { email: string; password: string }) {
   return request('/auth/login', { method: 'POST', body: JSON.stringify(payload) });
 }
 
-export async function registerUser(payload: { firstName: string; lastName: string; email: string; password: string; role: 'tenant' | 'landlord' | 'agent' | 'realEstate'; phone?: string; companyName?: string; companyWebsite?: string }) {
+export async function registerUser(payload: { firstName: string; lastName: string; email: string; password: string; role: 'tenant' | 'landlord' | 'agent' | 'realEstate' | 'operations' | 'finance'; phone?: string; companyName?: string; companyWebsite?: string; dateOfBirth?: string; gender?: string; country?: string; state?: string; lga?: string; address?: string; nin?: string; bvn?: string; employer?: string; occupation?: string; incomeRange?: string; nextOfKin?: string; guarantor?: string }) {
   return request('/auth/register', { method: 'POST', body: JSON.stringify(payload) });
 }
 

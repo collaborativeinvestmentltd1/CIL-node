@@ -21,7 +21,7 @@ const kpis = [
   },
   {
     label: "Monthly Revenue",
-    value: "₦12.2M",
+    value: "â‚¦12.2M",
     icon: <FaDollarSign className="h-5 w-5" />,
     detail: "+8.4% vs last month",
   },
@@ -38,42 +38,42 @@ const properties = [
     name: "Ikoyi Luxury Suites",
     occupancy: 96,
     trend: "+4.2%",
-    revenue: "₦4.1M",
+    revenue: "â‚¦4.1M",
     status: "High demand",
   },
   {
     name: "Lekki Riverside Villas",
     occupancy: 88,
     trend: "-1.1%",
-    revenue: "₦2.7M",
+    revenue: "â‚¦2.7M",
     status: "Under renovation",
   },
   {
     name: "Abuja Executive Plaza",
     occupancy: 94,
     trend: "+2.8%",
-    revenue: "₦3.4M",
+    revenue: "â‚¦3.4M",
     status: "Strong leasing",
   },
 ];
 
 const maintenanceItems = [
   {
-    title: "Water pump repair — Unit 3A",
+    title: "Water pump repair â€” Unit 3A",
     property: "Ikoyi Luxury Suites",
     status: "In progress",
     badge: "Urgent",
     due: "Today",
   },
   {
-    title: "AC service — Lekki Riverside",
+    title: "AC service â€” Lekki Riverside",
     property: "Lekki Riverside Villas",
     status: "Pending assignment",
     badge: "High",
     due: "Tomorrow",
   },
   {
-    title: "Roof inspection — Abuja Plaza",
+    title: "Roof inspection â€” Abuja Plaza",
     property: "Abuja Executive Plaza",
     status: "Scheduled",
     badge: "Medium",
@@ -82,9 +82,9 @@ const maintenanceItems = [
 ];
 
 const payments = [
-  { tenant: "Chioma Okonkwo", property: "Ikoyi Luxury Suites", amount: "₦520,000", status: "Paid", date: "May 28" },
-  { tenant: "Ibrahim Hassan", property: "Lekki Riverside Villas", amount: "₦420,000", status: "Pending", date: "May 30" },
-  { tenant: "Ada Nwankwo", property: "Abuja Executive Plaza", amount: "₦640,000", status: "Paid", date: "May 25" },
+  { tenant: "Chioma Okonkwo", property: "Ikoyi Luxury Suites", amount: "â‚¦520,000", status: "Paid", date: "May 28" },
+  { tenant: "Ibrahim Hassan", property: "Lekki Riverside Villas", amount: "â‚¦420,000", status: "Pending", date: "May 30" },
+  { tenant: "Ada Nwankwo", property: "Abuja Executive Plaza", amount: "â‚¦640,000", status: "Paid", date: "May 25" },
 ];
 
 const applications = [
@@ -268,7 +268,7 @@ export default function LandlordDashboard() {
             <div className="rounded-3xl bg-slate-950 p-5 text-white">
               <div className="flex items-center justify-between text-sm text-slate-300">
                 <span>Revenue this month</span>
-                <span>₦12.2M</span>
+                <span>â‚¦12.2M</span>
               </div>
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2 rounded-3xl bg-slate-900 p-4">
@@ -277,22 +277,22 @@ export default function LandlordDashboard() {
                 </div>
                 <div className="space-y-2 rounded-3xl bg-slate-900 p-4">
                   <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Operating expenses</p>
-                  <p className="text-2xl font-semibold text-white">₦1.6M</p>
+                  <p className="text-2xl font-semibold text-white">â‚¦1.6M</p>
                 </div>
               </div>
             </div>
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="rounded-3xl bg-white p-4 text-sm text-slate-600 shadow-sm">
                 <p className="uppercase tracking-[0.24em] text-slate-500">Rent due</p>
-                <p className="mt-3 text-xl font-semibold text-primary-900">₦1.8M</p>
+                <p className="mt-3 text-xl font-semibold text-primary-900">â‚¦1.8M</p>
               </div>
               <div className="rounded-3xl bg-white p-4 text-sm text-slate-600 shadow-sm">
                 <p className="uppercase tracking-[0.24em] text-slate-500">Arrears</p>
-                <p className="mt-3 text-xl font-semibold text-primary-900">₦240K</p>
+                <p className="mt-3 text-xl font-semibold text-primary-900">â‚¦240K</p>
               </div>
               <div className="rounded-3xl bg-white p-4 text-sm text-slate-600 shadow-sm">
                 <p className="uppercase tracking-[0.24em] text-slate-500">Refunds pending</p>
-                <p className="mt-3 text-xl font-semibold text-primary-900">₦0</p>
+                <p className="mt-3 text-xl font-semibold text-primary-900">â‚¦0</p>
               </div>
             </div>
           </Panel>
@@ -326,14 +326,14 @@ export default function LandlordDashboard() {
             <div className="flex items-center justify-between gap-3 rounded-3xl border border-slate-200 bg-white p-5">
               <div>
                 <p className="text-sm font-semibold text-primary-900">Chioma Okonkwo</p>
-                <p className="text-sm text-slate-500">Ikoyi Luxury Suites • Lease expiring Jun 30</p>
+                <p className="text-sm text-slate-500">Ikoyi Luxury Suites â€¢ Lease expiring Jun 30</p>
               </div>
               <span className="rounded-full bg-emerald-50 px-3 py-1 text-sm font-semibold text-emerald-700">Good standing</span>
             </div>
             <div className="flex items-center justify-between gap-3 rounded-3xl border border-slate-200 bg-white p-5">
               <div>
                 <p className="text-sm font-semibold text-primary-900">Ibrahim Hassan</p>
-                <p className="text-sm text-slate-500">Lekki Riverside Villas • Rent due Jun 5</p>
+                <p className="text-sm text-slate-500">Lekki Riverside Villas â€¢ Rent due Jun 5</p>
               </div>
               <span className="rounded-full bg-amber-50 px-3 py-1 text-sm font-semibold text-amber-700">Rent due</span>
             </div>
@@ -376,7 +376,7 @@ export default function LandlordDashboard() {
                 <div className="mt-3 flex items-center justify-between gap-3">
                   <div>
                     <p className="text-lg font-semibold text-primary-900">Ikoyi Luxury Suites</p>
-                    <p className="text-sm text-slate-500">8 units • 96% occupancy</p>
+                    <p className="text-sm text-slate-500">8 units â€¢ 96% occupancy</p>
                   </div>
                   <span className="rounded-full bg-accent-100 px-3 py-1 text-sm font-semibold text-accent-700">Premium</span>
                 </div>
@@ -397,5 +397,4 @@ export default function LandlordDashboard() {
     </div>
   );
 }
-
 

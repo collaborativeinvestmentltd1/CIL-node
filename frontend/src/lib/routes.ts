@@ -8,7 +8,9 @@ export type SidebarRole =
   | "admin"
   | "corporate"
   | "agent"
-  | "realEstate";
+  | "realEstate"
+  | "operations"
+  | "finance";
 
 export function getDashboardPath(role: string): string {
   switch (role) {
@@ -22,6 +24,10 @@ export function getDashboardPath(role: string): string {
       return "/agent";
     case "realEstate":
       return "/real-estate";
+    case "operations":
+      return "/operations";
+    case "finance":
+      return "/finance";
     default:
       return "/tenant";
   }
@@ -32,13 +38,17 @@ export function getProfilePath(role: string): string {
     case "landlord":
       return "/landlord/profile";
     case "admin":
-      return "/admin";
+      return "/admin/profile";
     case "corporate":
-      return "/corporate";
+      return "/corporate/profile";
     case "agent":
       return "/agent/profile";
     case "realEstate":
       return "/real-estate/profile";
+    case "operations":
+      return "/operations/profile";
+    case "finance":
+      return "/finance/profile";
     default:
       return "/tenant/profile";
   }
@@ -50,6 +60,8 @@ export function roleToSidebarType(role: string): SidebarRole {
   if (role === "corporate") return "corporate";
   if (role === "agent") return "agent";
   if (role === "realEstate") return "realEstate";
+  if (role === "operations") return "operations";
+  if (role === "finance") return "finance";
   return "tenant";
 }
 
@@ -60,5 +72,7 @@ export const PROTECTED_PREFIXES = [
   "/corporate",
   "/agent",
   "/real-estate",
+  "/operations",
+  "/finance",
   "/profile",
 ] as const;
