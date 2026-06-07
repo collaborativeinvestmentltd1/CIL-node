@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { FaBars, FaPencilAlt } from "react-icons/fa";
 import ProfileAvatar from "@/components/ui/ProfileAvatar";
@@ -36,8 +37,8 @@ export default function DashboardHeader({ onMenuToggle }: DashboardHeaderProps) 
             <FaBars />
           </button>
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition shrink-0">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-accent-600 to-accent-500 flex items-center justify-center text-primary-950 text-xs font-bold">
-              C
+            <div className="h-9 w-9 rounded-xl shrink-0 relative">
+              <Image src="/logo.svg" alt="CIL Properties" fill className="object-contain" />
             </div>
             <span className="text-base font-semibold text-primary-900 hidden sm:inline truncate">
               CIL Properties

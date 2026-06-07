@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   FaHome,
@@ -171,8 +172,8 @@ function SidebarPanel({
           onClick={onNavigate}
           className="inline-flex items-center gap-3 hover:opacity-90 transition min-w-0"
         >
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-accent-600 to-accent-500 flex items-center justify-center text-primary-950 text-sm font-bold shrink-0">
-            C
+          <div className="h-10 w-10 rounded-xl shrink-0 relative">
+            <Image src="/logo.svg" alt="CIL Properties" fill className="object-contain" />
           </div>
           <div className="min-w-0">
             <p className="text-[10px] uppercase tracking-widest text-accent-300 font-semibold truncate">
